@@ -1,3 +1,11 @@
+
+# NOTE
+#------
+# This script is a test script for "FindWayPoint_20180213.R", where the process of finding waypoints has been
+# made more automatic.
+# Therefore, this script is now redundant.
+
+# Below are the codes
 #---------------------------
 # this script aims to
 # 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
