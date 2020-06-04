@@ -1,9 +1,15 @@
+#---
 # this script aims to i) identify potential pools,
 #                    ii) calculate pool depth (residual depth)
+# Author: Songyan Yu
+# Date created: 18/12/2017; updated: 04/06/2020
+#---
 
+# prerequisite variables
+source("R/Longitudinal profile.R")  # need the "value" variable
+summary(value)
 
-value   #needed variable: longitudinal values variable. should run "Longitunidal profile.R" first
-
+# customised funciton
 localMaxima <- function(x) {
   # Use -Inf instead if x is numeric (non-integer)
   y <- diff(c(-.Machine$integer.max, x)) > 0L
