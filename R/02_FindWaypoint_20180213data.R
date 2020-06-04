@@ -9,7 +9,7 @@
 #--------------------------
 
 # prerequisite variables
-source("R/Longitudinal profile.R")  # need the "value" variable
+source("R/01_Longitudinal profile.R")  # need the "value" variable
 summary(value)
 
 # 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
