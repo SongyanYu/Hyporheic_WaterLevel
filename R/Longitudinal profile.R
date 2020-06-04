@@ -3,19 +3,16 @@
 # Author: Songyan Yu
 # Date created: 04/06/2020
 #---
-
-setwd("../../Kobble Cr")
-
 library(raster)
 
-longprofile<-raster("kob_longprof.tif")  #1m longitudinal profile
+longprofile<-raster("../../Kobble Cr/kob_longprof.tif")  #1m longitudinal profile
 plot(values(longprofile)[!is.na(values(longprofile))])
 value<-values(longprofile)[!is.na(values(longprofile))] # the order of "value" is from top to bottom
 value.location<-which(!is.na(values(longprofile)))
 value.col<-value.location%%4708  #4708 is the number of columns of the raster
 value.row<-value.location%/%4708
 
-flowdir<-raster("Flowdir_kob.tif")
+flowdir<-raster("../../Kobble Cr/Flowdir_kob.tif")
 flowdir.value<-values(flowdir)[!is.na(values(flowdir))]
 
 ## Rearrange all of the main stem pixels in the order of upstream to downstream.
@@ -57,12 +54,12 @@ for(i in 1:(length(flowdir.value)-1)){
 
 ##plot the longitudinal channel profile
 value<-value[rev(flowdirection)]
-plot(value)
+#plot(value)
 
-width<-7
-asp<-1.5
-ppi<-150
-png(paste0("Longitudinal profile Kobble Cr_1.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
-plot(value[2550:4020],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
-dev.off()
+#width<-7
+#asp<-1.5
+#ppi<-150
+#png(paste0("Longitudinal profile Kobble Cr_1.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
+#plot(value[2550:4020],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
+#dev.off()
 
