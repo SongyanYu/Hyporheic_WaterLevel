@@ -6,7 +6,7 @@
 #---
 
 # prerequisite variables
-source("R/Longitudinal profile.R")  # need the "value" variable
+source("R/01_Longitudinal profile.R")  # need the "value" variable
 summary(value)
 
 # customised funciton ro calculate local maxima
@@ -70,7 +70,6 @@ start.pool.location[1]<-local.maxima.location[1]
 end.pool.location[1]<-upstream.end.pool
 
 i=2
-
 while(local.maxima.location[downstream.end.pool]<max(local.maxima.location)){
   
   top.elevation.pool<-value[local.maxima.location[downstream.end.pool]]
@@ -111,16 +110,13 @@ for(i in exclu.pool){
 sum(pool.width)/length(value)
 
 ## plot for Kobble Cr
-
 width<-5
 asp<-2.5
 ppi<-100
-png(paste0("Longitudinal profile Kobble Cr_2.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
-
-plot(value[2500:4067]~c(2500:4067),type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93),xlim=c(2500,4067))
-
-for(i in 1:length(pool.points.list)){
-  temp_df<-data.frame(x=pool.points.list[[i]],y=value[pool.points.list[[i]]])
+#png(paste0("Figure/Longitudinal profile Kobble Cr.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
+plot(value[2500:4067],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
+for(i in 68:length(pool.points.list)){
+  temp_df<-data.frame(x=pool.points.list[[i]]-2500,y=value[pool.points.list[[i]]])
   
   end=nrow(temp_df)
   b=temp_df[1,2]
@@ -130,7 +126,6 @@ for(i in 1:length(pool.points.list)){
   temp_df[(end-1),]<-newrow
   polygon(temp_df,col="blue")
 }
-
-dev.off()
+#dev.off()
 
 
