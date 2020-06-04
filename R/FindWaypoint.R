@@ -9,11 +9,10 @@
 #--------------------------
 
 # needed variables
-value  # obtained by running "Longitudinal profile.R"
-
-# 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
+source("R/Longitudinal profile.R")  # need the "value" variable
 summary(value)
 
+# 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
 waypoint.64.elevation<-92.32  # the waypoint number can be found from Kobble creek field data
 n<-which(value>waypoint.64.elevation-0.01&value<waypoint.64.elevation+0.01)
 value[n]
