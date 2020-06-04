@@ -96,6 +96,7 @@ recession.scenarios%>%
   theme_classic()+
   scale_color_brewer(palette = "Paired")+
   ylab("Proportion of Kobble Cr with surface water")+
-  scale_x_date(date_breaks = "3 days")
+  scale_x_date(date_breaks = "3 days")+
+  ggsave(filename = "Figure/Surface water extent_Obs-Sim.png")
 
 
