@@ -8,13 +8,12 @@
 # Author: Songyan Yu
 #--------------------------
 
-# needed variables
-value  # obtained by running "Longitudinal profile.R"
-
-## 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
+# prerequisite variables
+source("R/Longitudinal profile.R")  # need the "value" variable
 summary(value)
 
-waypoints_all<-read.csv("H:/My Drive/PhD at GU/Part 3 River channel identification/Kobble Cr/waypoint.csv")
+# 1) idenfity the recorded waypoints in the longitudinal profile (its index in the "value" variable).
+waypoints_all<-read.csv("../../Kobble Cr/waypoint.csv")
 location<-c()
 
 waypoints<-waypoints_all[waypoints_all$Date==1,]  ## use "Date" for different date groups.
