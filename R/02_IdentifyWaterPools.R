@@ -95,16 +95,16 @@ for(i in 1:length(start.pool.location)){
 }
 
 # exclude identified pools that are less than 0.1m deep.
-exclu.pool<-which(pool.depth<=0.1)  #0.1m is a number referred to Zimmermann's paper (2008)
-start.pool.location<-start.pool.location[-exclu.pool]
-end.pool.location<-end.pool.location[-exclu.pool]
-pool.depth<-pool.depth[pool.depth>0.1]
-summary(pool.depth)
+#exclu.pool<-which(pool.depth<=0.1)  #0.1m is a number referred to Zimmermann's paper (2008)
+#start.pool.location<-start.pool.location[-exclu.pool]
+#end.pool.location<-end.pool.location[-exclu.pool]
+#pool.depth<-pool.depth[pool.depth>0.1]
+#summary(pool.depth)
 
-exclu.pool<-rev(exclu.pool)
-for(i in exclu.pool){
-  pool.points.list[[i]]<-NULL
-}
+#exclu.pool<-rev(exclu.pool)
+#for(i in exclu.pool){
+#  pool.points.list[[i]]<-NULL
+#}
 
 #Integrate all water pools to estimate surface water extent (% length of river channel covered by surface water)
 sum(pool.width)/length(value)
