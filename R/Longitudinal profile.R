@@ -63,6 +63,6 @@ width<-7
 asp<-1.5
 ppi<-150
 png(paste0("Longitudinal profile Kobble Cr_1.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
-plot(value[2925:3255],type="l",xlab=c("Downstream distance /m"),ylab=c("Elevation /m"))
+plot(value[2550:4020],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
 dev.off()
 
