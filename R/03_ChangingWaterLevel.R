@@ -1,103 +1,101 @@
-###################
-# this script can only deal with non-increasing water level change.
-###################
 
+#---
+# This script estimates reduction in surface water extent when flows cease.
+# Note that this script works for non-increasing water level change.
+# Author: Songyan Yu
+# Date created: 28/11/2017; updated: 04/06/2020
+#---
 
-### Needed previous variables
-pool.points.list<-pool.points.list.1    # should run"IdentifyWaterPools.R" before this script
+# prerequisite variables "value" and "pool.points.list"
+source("R/01_Longitudinal profile.R")
+source("R/02_IdentifyWaterPools.R")
 
-##changing water level
-# plot Day 1 since cease to flow
-
-pool.points.list.1<-pool.points.list
-
-plot(value[2925:3300]~c(2925:3300),type="p",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(80,86))
-
-for(i in c(75:80)){
-  points(value[pool.points.list[[i]]]~pool.points.list[[i]],col="blue",pch=16)
-}
-
+# Day 1 of cease-to-flow period
 surface.water.extent<-c()
+wet.length<-length(unique(unlist(pool.points.list[170:306])))
+surface.water.extent[1]<-wet.length/(4067-2500+1)
 
-element.length<-c()
-for(i in c(75:80)){
-  element.length[i]<-length(unlist(pool.points.list.1[[i]]))
-  
-}
+#plot(value[2500:4067]~c(2500:4067),type="p",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
+#for(i in c(170:306)){
+#  points(value[pool.points.list[[i]]]~pool.points.list[[i]],col="blue",pch=16)
+#}
 
-surface.water.extent[1]<-sum(element.length,na.rm=TRUE)/(3300-2925+1)
-
-# Day 2~
-GW<-seq(-10,10,1)
-PPT<-c(5.6,0,2.3,4)
-PET<-c(12.5,11.5,13.2,9.6)
-
-SW<-PET[1]-PPT[1]+GW
-
-SW<-c(0,0.06,0.06,0.07,0.04,0.10,0.08,0.07,0.08,0.04)
-
-surface.water.extent<-c()
+# Day 2~14 of cease-to-flow period
+recession.rate<-seq(0.002,0.02,by=0.002)  # unit: m/day
 water.level<-c()
+pool.points.dyn<-list()
+surface.water.extent.list<-list()
 
-######### under one GW scenario ############
-
-for(j in 1:length(SW)){          #j is the number of days to estimate surface water extent.
-  
-  cat("Day ",j,"\n")
-  
-  if(j==1){
+for (m in 1:length(recession.rate)){
+  for(j in 2:14){          #j - the number of days; 14 - the number of observation days (9-22 Feb 2018)
     
-    for(i in 1:length(pool.points.list)){     #i is the number of identified water pools along the stream.
-      
-      water.level[i]<-value[pool.points.list.1[[i]]][1]-SW[j]
-      
-      dry.point<-unique(pool.points.list.1[[i]][which(value[pool.points.list.1[[i]]]>water.level[i])])
-      wet.point<-setdiff(pool.points.list.1[[i]],dry.point)
-      pool.points.list[[i]]<-wet.point
-        
+    cat("Day ",j,"\n")
+    
+    if(j==2){
+      for(i in 1:length(pool.points.list)){     #i is the number of identified water pools along the stream.
+        water.level[i]<-value[pool.points.list[[i]]][1]-recession.rate[m]
+        dry.point<-unique(pool.points.list[[i]][which(value[pool.points.list[[i]]]>water.level[i])])
+        wet.point<-setdiff(pool.points.list[[i]],dry.point)
+        pool.points.dyn[[i]]<-wet.point
+      }
+      wet.length<-length(unique(unlist(pool.points.dyn[170:306])))
+      surface.water.extent[j]<-wet.length/(4067-2500+1)
     }
     
-    element.length<-c()
-    for(m in c(75:80)){
-      element.length[m]<-length(unique(unlist(pool.points.list[[m]])))
+    if(j>2){
+      for(i in 1:length(pool.points.list)){     #i is the number of identified water pools along the stream.
+        water.level[i]<-water.level[i]-recession.rate[m]
+        dry.point<-unique(pool.points.dyn[[i]][which(value[pool.points.dyn[[i]]]>water.level[i])])
+        wet.point<-setdiff(pool.points.dyn[[i]],dry.point)
+        pool.points.dyn[[i]]<-wet.point
+      }
+      wet.length<-length(unique(unlist(pool.points.dyn[170:306])))
+      surface.water.extent[j]<-wet.length/(4067-2500+1)
     }
     
-    surface.water.extent[j]<-sum(element.length,na.rm=TRUE)/(3300-2925+1)
-    
+    #width<-5
+    #asp<-2.5
+    #ppi<-100
+    #png(paste0("Figure/Surface water extent_Day ",j,".png"),width = width*asp*ppi,height = width*ppi,res=ppi)
+    #plot(value[2500:4067]~c(2500:4067),type="p",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
+    #for(i in c(170:306)){
+    #  points(value[pool.points.dyn[[i]]]~pool.points.dyn[[i]],col="blue",pch=16)
+    #}
+    #dev.off()
   }
   
-  if(j>1){
-    
-    for(i in 1:length(pool.points.list)){     #i is the number of identified water pools along the stream.
-      
-      water.level[i]<-water.level[i]-SW[j]
-      
-      dry.point<-unique(pool.points.list[[i]][which(value[pool.points.list[[i]]]>water.level[i])])
-      wet.point<-setdiff(pool.points.list[[i]],dry.point)
-      pool.points.list[[i]]<-wet.point
-
-    }
-    
-    element.length<-c()
-    for(m in c(75:80)){
-      element.length[m]<-length(unique(unlist(pool.points.list[[m]])))
-    }
-    
-    surface.water.extent[j]<-sum(element.length,na.rm=TRUE)/(3300-2925+1)
-  }
-  
-  width<-5
-  asp<-2.5
-  ppi<-100
-  
-  png(paste0("Longitudinal profile Kobble Cr_Day ",j,".png"),width = width*asp*ppi,height = width*ppi,res=ppi)
-  
-  plot(value[2925:3300]~c(2925:3300),type="p",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(80,86))
-  
-  for(i in c(1:99)){
-    points(value[pool.points.list[[i]]]~pool.points.list[[i]],col="blue",pch=16)
-  }
-  
-  dev.off()
+  surface.water.extent.list[[m]]<-surface.water.extent
 }
-  
+
+recession.scenarios<-do.call(rbind.data.frame,surface.water.extent.list)
+colnames(recession.scenarios)<-c(1:14)
+rownames(recession.scenarios)<-as.character(seq(0.002,0.02,by=0.002))
+recession.scenarios<-data.frame(t(recession.scenarios))
+recession.scenarios$Date<-seq.Date(from = as.Date("2018/02/09"),
+                              to=as.Date("2018/02/22"),
+                              by="day")
+
+# combine sim vs obs data
+obs<-read.csv("Data/Field data.csv")
+colnames(obs)[2]<-"obs"
+obs<-mutate(obs,Date=as.Date(Date,format="%d/%m/%Y"))
+
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(tidyr)
+
+recession.scenarios%>%
+  left_join(.,obs,by="Date")%>%
+  pivot_longer(cols = -c(Date,obs),names_to = "Recession_rate")%>%
+  mutate(Recession_rate=as.character(gsub("X","",Recession_rate)))%>%
+  ggplot(aes(x=Date))+
+  geom_line(aes(y=value,color=Recession_rate))+
+  geom_point(aes(y=obs),size=2.3,shape=19)+
+  geom_line(data = obs,aes(y=obs,group="Observation"),size=1.2,color="black")+
+  theme_classic()+
+  scale_color_brewer(palette = "Paired")+
+  ylab("Proportion of Kobble Cr with surface water")+
+  scale_x_date(date_breaks = "3 days")
+
+
