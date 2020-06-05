@@ -29,7 +29,7 @@ surface.water.extent.list<-list()
 for (m in 1:length(recession.rate)){
   for(j in 2:14){          #j - the number of days; 14 - the number of observation days (9-22 Feb 2018)
     
-    cat("Day ",j,"\n")
+    #cat("Day ",j,"\n")
     
     if(j==2){
       for(i in 1:length(pool.points.list)){     #i is the number of identified water pools along the stream.
@@ -78,12 +78,13 @@ recession.scenarios$Date<-seq.Date(from = as.Date("2018/02/09"),
 # combine sim vs obs data
 obs<-read.csv("Data/Field data.csv")
 colnames(obs)[2]<-"obs"
-obs<-mutate(obs,Date=as.Date(Date,format="%d/%m/%Y"))
 
 library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(tidyr)
+
+obs<-mutate(obs,Date=as.Date(Date,format="%d/%m/%Y"))
 
 recession.scenarios%>%
   left_join(.,obs,by="Date")%>%
@@ -94,9 +95,7 @@ recession.scenarios%>%
   geom_point(aes(y=obs),size=2.3,shape=19)+
   geom_line(data = obs,aes(y=obs,group="Observation"),size=1.2,color="black")+
   theme_classic()+
-  scale_color_brewer(palette = "Paired")+
+  scale_color_brewer(palette = "Paired",name="Recession rate\n(m)")+
   ylab("Proportion of Kobble Cr with surface water")+
   scale_x_date(date_breaks = "3 days")+
   ggsave(filename = "Figure/Surface water extent_Obs-Sim.png")
-
-
