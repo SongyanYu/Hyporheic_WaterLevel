@@ -9,8 +9,8 @@ longprofile<-raster("../../Kobble Cr/kob_longprof.tif")  #1m longitudinal profil
 #plot(values(longprofile)[!is.na(values(longprofile))])
 value<-values(longprofile)[!is.na(values(longprofile))] # the order of "value" is from top to bottom
 value.location<-which(!is.na(values(longprofile)))
-value.col<-value.location%%4708  #4708 is the number of columns of the raster
-value.row<-value.location%/%4708
+value.col<-value.location %% ncol(longprofile)  #4708 is the number of columns of the raster
+value.row<-value.location %/% ncol(longprofile)
 
 flowdir<-raster("../../Kobble Cr/Flowdir_kob.tif")
 flowdir.value<-values(flowdir)[!is.na(values(flowdir))]
