@@ -95,26 +95,27 @@ for(i in 1:length(start.pool.location)){
 }
 
 # exclude identified pools that are less than 0.1m deep.
-#exclu.pool<-which(pool.depth<=0.1)  #0.1m is a number referred to Zimmermann's paper (2008)
-#start.pool.location<-start.pool.location[-exclu.pool]
-#end.pool.location<-end.pool.location[-exclu.pool]
-#pool.depth<-pool.depth[pool.depth>0.1]
-#summary(pool.depth)
+exclu.pool<-which(pool.depth<=0.1)  #0.1m is a number referred to Zimmermann's paper (2008)
+start.pool.location<-start.pool.location[-exclu.pool]
+end.pool.location<-end.pool.location[-exclu.pool]
+pool.depth<-pool.depth[pool.depth>0.1]
+summary(pool.depth)
+summary(pool.width)
 
-#exclu.pool<-rev(exclu.pool)
-#for(i in exclu.pool){
-#  pool.points.list[[i]]<-NULL
-#}
+exclu.pool<-rev(exclu.pool)
+for(i in exclu.pool){
+  pool.points.list[[i]]<-NULL
+}
 
 #Integrate all water pools to estimate surface water extent (% length of river channel covered by surface water)
 sum(pool.width)/length(value)
 
 ## plot for Kobble Cr
-width<-5
-asp<-2.5
-ppi<-100
+#width<-5
+#asp<-2.5
+#ppi<-100
 #png(paste0("Figure/Longitudinal profile Kobble Cr.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
-plot(value[2500:4067],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
+plot(value[2500:4000],type="l",xlab=c("Upstream distance /m"),ylab=c("Elevation /m"),ylim=c(75,93))
 for(i in 68:length(pool.points.list)){
   temp_df<-data.frame(x=pool.points.list[[i]]-2500,y=value[pool.points.list[[i]]])
   
