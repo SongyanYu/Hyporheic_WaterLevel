@@ -86,6 +86,7 @@ library(tidyr)
 
 obs<-mutate(obs,Date=as.Date(Date,format="%d/%m/%Y"))
 
+# plot obs vs sim surface water extent
 recession.scenarios%>%
   left_join(.,obs,by="Date")%>%
   pivot_longer(cols = -c(Date,obs),names_to = "Recession_rate")%>%
@@ -95,7 +96,45 @@ recession.scenarios%>%
   geom_point(aes(y=obs),size=2.3,shape=19)+
   geom_line(data = obs,aes(y=obs,group="Observation"),size=1.2,color="black")+
   theme_classic()+
-  scale_color_brewer(palette = "Paired",name="Recession rate\n(m)")+
+  scale_color_brewer(palette = "Paired",name="Water level\nrecession rate\n(m/day)")+
   ylab("Proportion of Kobble Cr with surface water")+
   scale_x_date(date_breaks = "3 days")+
-  ggsave(filename = "Figure/Surface water extent_Obs-Sim.png")
+  ggsave(filename = "Figure/Surface water extent_Obs-Sim.png",
+         width = 6.18, height = 3.77)
+
+# plot remaining pools
+width<-5
+asp<-2.5
+ppi<-150
+png(paste0("Figure/Longitudinal profile Kobble Cr.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
+plot(value[2500:4067],type="l",xlab=c("Upstream distance (m)"),ylab=c("Elevation (AHD m)"),ylim=c(75,93))
+for(i in 170:length(pool.points.list)){
+  temp_df<-data.frame(x=pool.points.list[[i]]-2500,y=value[pool.points.list[[i]]])
+  
+  end=nrow(temp_df)
+  b=temp_df[1,2]
+  a=temp_df[(end-2),1]+(b-temp_df[(end-2),2])*(temp_df[(end-1),1]-temp_df[(end-2),1])/(temp_df[(end-1),2]-temp_df[(end-2),2])
+  newrow<-c(a,b)
+  
+  temp_df[(end-1),]<-newrow
+  polygon(temp_df,col="blue")
+}
+dev.off()
+
+width<-5
+asp<-1.5
+ppi<-100
+png(paste0("Figure/Longitudinal profile Kobble Cr_inset.png"),width = width*asp*ppi,height = width*ppi,res=ppi)
+plot(value[3190:3500],type="l",xlab=c("Upstream distance (m)"),ylab=c("Elevation (AHD m)"),ylim=c(81,89))
+for(i in 246:269){
+  temp_df<-data.frame(x=pool.points.list[[i]]-3189,y=value[pool.points.list[[i]]])
+  
+  end=nrow(temp_df)
+  b=temp_df[1,2]
+  a=temp_df[(end-2),1]+(b-temp_df[(end-2),2])*(temp_df[(end-1),1]-temp_df[(end-2),1])/(temp_df[(end-1),2]-temp_df[(end-2),2])
+  newrow<-c(a,b)
+  
+  temp_df[(end-1),]<-newrow
+  polygon(temp_df,col="blue")
+}
+dev.off()
