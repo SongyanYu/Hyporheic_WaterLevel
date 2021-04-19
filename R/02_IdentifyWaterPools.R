@@ -6,8 +6,8 @@
 #---
 
 # prerequisite variables
-source("R/01_Longitudinal profile.R")  # need the "value" variable
-summary(value)
+#source("R/01_Longitudinal profile.R")  # need the "value" variable
+#summary(value)
 
 # customised funciton ro calculate local maxima
 localMaxima <- function(x) {
@@ -108,7 +108,7 @@ for(i in 1:length(start.pool.location)){
 #}
 
 #Integrate all water pools to estimate surface water extent (% length of river channel covered by surface water)
-sum(pool.width)/length(value)
+#sum(pool.width)/length(value)
 
 ## plot for Kobble Cr
 #width<-5
