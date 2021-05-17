@@ -71,8 +71,8 @@ recession.scenarios<-do.call(rbind.data.frame,surface.water.extent.list)
 colnames(recession.scenarios)<-c(1:14)
 rownames(recession.scenarios)<-as.character(seq(0.002,0.02,by=0.002))
 recession.scenarios<-data.frame(t(recession.scenarios))
-recession.scenarios$Date<-seq.Date(from = as.Date("2018/02/09"),
-                              to=as.Date("2018/02/22"),
+recession.scenarios$Date<-seq.Date(from = dmy("09/02/2018"),
+                              to=dmy("22/02/2018"),
                               by="day")
 
 # combine sim vs obs data
@@ -98,7 +98,7 @@ recession.scenarios%>%
   theme_classic()+
   scale_color_brewer(palette = "Paired",name="Water level\nrecession rate\n(m/day)")+
   ylab("Proportion of Kobble Cr with surface water")+
-  scale_x_date(date_breaks = "3 days")+
+  scale_x_date(date_breaks = "3 days",date_labels = "%d/%m/%Y")+
   ggsave(filename = "Figure/Surface water extent_Obs-Sim.png",
          width = 6.18, height = 3.77)
 
