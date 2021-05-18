@@ -83,7 +83,7 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(tidyr)
-
+  
 obs<-mutate(obs,Date=as.Date(Date,format="%d/%m/%Y"))
 
 # plot obs vs sim surface water extent
